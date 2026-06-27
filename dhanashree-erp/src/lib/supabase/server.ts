@@ -7,6 +7,8 @@ import type { Database } from "@/types/database";
 export async function createClient() {
   const cookieStore = await cookies();
   const env = serverEnv();
+  const rememberMe = cookieStore.get("sb-remember-me")?.value;
+  const isSessionOnly = rememberMe === "false";
 
   return createServerClient<Database>(
     env.NEXT_PUBLIC_SUPABASE_URL,
@@ -18,7 +20,10 @@ export async function createClient() {
         },
         setAll(cookiesToSet) {
           cookiesToSet.forEach(({ name, options, value }) => {
-            cookieStore.set(name, value, options);
+            const finalOptions = isSessionOnly
+              ? { ...options, maxAge: undefined, expires: undefined }
+              : options;
+            cookieStore.set(name, value, finalOptions);
           });
         },
       },
