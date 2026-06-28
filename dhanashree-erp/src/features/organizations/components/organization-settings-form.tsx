@@ -187,17 +187,22 @@ export function OrganizationSettingsForm({
 
       {!canManage && (
         <p className="text-muted-foreground rounded-md border p-3 text-sm">
-          Only owners and admins can update organization settings.
+          Only owners and admins can update organization settings. You can view
+          the current organization details with your role.
         </p>
       )}
 
-      <FormError message={error} />
-      <FormSuccess message={success} />
+      {canManage ? (
+        <>
+          <FormError message={error} />
+          <FormSuccess message={success} />
 
-      <LoadingButton type="submit" isLoading={isPending} disabled={!canManage}>
-        <Save />
-        Save settings
-      </LoadingButton>
+          <LoadingButton type="submit" isLoading={isPending}>
+            <Save />
+            Save settings
+          </LoadingButton>
+        </>
+      ) : null}
     </form>
   );
 }
