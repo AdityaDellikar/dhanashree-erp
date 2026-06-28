@@ -60,6 +60,69 @@ export type Database = {
           },
         ];
       };
+      parties: {
+        Row: {
+          address: string | null;
+          contact_person: string | null;
+          created_at: string;
+          created_by: string;
+          email: string | null;
+          gstin: string | null;
+          id: string;
+          name: string;
+          notes: string | null;
+          organization_id: string;
+          phone: string | null;
+          type: Database["public"]["Enums"]["party_type"];
+          updated_at: string;
+        };
+        Insert: {
+          address?: string | null;
+          contact_person?: string | null;
+          created_at?: string;
+          created_by: string;
+          email?: string | null;
+          gstin?: string | null;
+          id?: string;
+          name: string;
+          notes?: string | null;
+          organization_id: string;
+          phone?: string | null;
+          type: Database["public"]["Enums"]["party_type"];
+          updated_at?: string;
+        };
+        Update: {
+          address?: string | null;
+          contact_person?: string | null;
+          created_at?: string;
+          created_by?: string;
+          email?: string | null;
+          gstin?: string | null;
+          id?: string;
+          name?: string;
+          notes?: string | null;
+          organization_id?: string;
+          phone?: string | null;
+          type?: Database["public"]["Enums"]["party_type"];
+          updated_at?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "parties_created_by_fkey";
+            columns: ["created_by"];
+            isOneToOne: false;
+            referencedRelation: "users";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "parties_organization_id_fkey";
+            columns: ["organization_id"];
+            isOneToOne: false;
+            referencedRelation: "organizations";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
       organization_members: {
         Row: {
           created_at: string;
@@ -145,6 +208,69 @@ export type Database = {
             columns: ["created_by"];
             isOneToOne: false;
             referencedRelation: "users";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
+      projects: {
+        Row: {
+          budget_amount: number | null;
+          code: string;
+          created_at: string;
+          created_by: string;
+          description: string | null;
+          end_date: string | null;
+          id: string;
+          location: string | null;
+          name: string;
+          organization_id: string;
+          start_date: string | null;
+          status: Database["public"]["Enums"]["project_status"];
+          updated_at: string;
+        };
+        Insert: {
+          budget_amount?: number | null;
+          code: string;
+          created_at?: string;
+          created_by: string;
+          description?: string | null;
+          end_date?: string | null;
+          id?: string;
+          location?: string | null;
+          name: string;
+          organization_id: string;
+          start_date?: string | null;
+          status?: Database["public"]["Enums"]["project_status"];
+          updated_at?: string;
+        };
+        Update: {
+          budget_amount?: number | null;
+          code?: string;
+          created_at?: string;
+          created_by?: string;
+          description?: string | null;
+          end_date?: string | null;
+          id?: string;
+          location?: string | null;
+          name?: string;
+          organization_id?: string;
+          start_date?: string | null;
+          status?: Database["public"]["Enums"]["project_status"];
+          updated_at?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "projects_created_by_fkey";
+            columns: ["created_by"];
+            isOneToOne: false;
+            referencedRelation: "users";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "projects_organization_id_fkey";
+            columns: ["organization_id"];
+            isOneToOne: false;
+            referencedRelation: "organizations";
             referencedColumns: ["id"];
           },
         ];
@@ -236,6 +362,9 @@ export type Database = {
     };
     Enums: {
       organization_role: "owner" | "admin" | "manager" | "staff" | "viewer";
+      party_type: "supplier" | "customer" | "subcontractor" | "other";
+      project_status:
+        "planned" | "active" | "on_hold" | "completed" | "cancelled";
     };
     CompositeTypes: Record<string, never>;
   };

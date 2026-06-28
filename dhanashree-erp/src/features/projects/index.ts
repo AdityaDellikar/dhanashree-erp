@@ -1,5 +1,6 @@
 export {
+  type ProjectFormInput,
+  projectFormSchema,
   type ProjectInput,
-  projectSchema,
-  projectStatusSchema,
-} from "./project.schema";
+  projectStatusOptions,
+} from "./schemas";

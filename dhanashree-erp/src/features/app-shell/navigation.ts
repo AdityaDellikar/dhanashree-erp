@@ -2,6 +2,7 @@ import {
   BarChart3,
   BriefcaseBusiness,
   FileText,
+  Handshake,
   LayoutDashboard,
   Settings,
   UsersRound,
@@ -36,8 +37,13 @@ export const navigationGroups: readonly NavigationGroup[] = [
         description: "Project workspace foundation.",
         href: "/app/projects",
         icon: BriefcaseBusiness,
-        isComingSoon: true,
         label: "Projects",
+      },
+      {
+        description: "Suppliers, customers, and subcontractors.",
+        href: "/app/parties",
+        icon: Handshake,
+        label: "Parties",
       },
       {
         description: "Labour and attendance workspace.",

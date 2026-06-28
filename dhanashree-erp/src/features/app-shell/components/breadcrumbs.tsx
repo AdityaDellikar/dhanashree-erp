@@ -10,6 +10,7 @@ const segmentLabels: Record<string, string> = {
   documents: "Documents",
   members: "Members",
   organization: "Organization",
+  parties: "Parties",
   projects: "Projects",
   reports: "Reports",
   settings: "Settings",

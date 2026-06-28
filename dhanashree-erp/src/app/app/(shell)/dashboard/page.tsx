@@ -2,6 +2,7 @@ import {
   BarChart3,
   Building2,
   FileText,
+  Handshake,
   Settings,
   UsersRound,
 } from "lucide-react";
@@ -23,6 +24,12 @@ const moduleCards = [
     href: "/app/projects",
     icon: Building2,
     title: "Projects",
+  },
+  {
+    description: "Shared suppliers, customers, and subcontractors.",
+    href: "/app/parties",
+    icon: Handshake,
+    title: "Parties",
   },
   {
     description: "Labour attendance and workforce history foundation.",

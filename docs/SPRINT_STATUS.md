@@ -88,3 +88,45 @@ Completed:
 - Dashboard foundation polish
 - Coming soon states for future modules
 - Shared loading, error, access denied, and coming soon states
+
+
+# Sprint 1
+
+Status: ✅ Completed
+
+Completed:
+
+- Batch 1 – Database Foundation
+
+- Batch 2 – Authentication
+
+- Batch 3 – Organizations & Multi-tenancy
+
+- Batch 4 – App Shell & RBAC
+
+Version:
+
+v0.1.0
+
+---
+
+# Sprint 2
+
+Goal:
+
+Project-based cashflow tracking foundation
+
+## Sprint 2 Batch 1
+✅ Completed
+
+Projects + Parties Foundation
+
+Completed:
+
+- Project database table, enum, RLS policies, indexes, and grants
+- Party database table, enum, RLS policies, indexes, and grants
+- Project list, detail, create, and edit flows
+- Party list, detail, create, and edit flows
+- Tenant-scoped server queries and actions
+- Projects and Parties app navigation links
+- Empty states and production-friendly forms
