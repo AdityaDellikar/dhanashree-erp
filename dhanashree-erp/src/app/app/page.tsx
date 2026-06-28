@@ -1,5 +1,13 @@
 import { redirect } from "next/navigation";
 
-export default function AppPage() {
-  redirect("/dashboard");
+import { getCurrentOrganization } from "@/features/organizations/queries";
+
+export default async function AppPage() {
+  const organization = await getCurrentOrganization();
+
+  if (!organization) {
+    redirect("/app/onboarding/organization");
+  }
+
+  redirect("/app/dashboard");
 }

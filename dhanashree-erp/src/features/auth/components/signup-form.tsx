@@ -45,8 +45,9 @@ export function SignupForm() {
         if (response.success) {
           setSuccess(response.message);
           toast.success(response.message);
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          router.push(`/verify-email?email=${encodeURIComponent(values.email)}` as any);
+          router.push(
+            `/verify-email?email=${encodeURIComponent(values.email)}`,
+          );
         } else {
           setError(response.message);
           toast.error(response.message);

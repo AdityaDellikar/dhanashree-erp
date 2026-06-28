@@ -9,7 +9,9 @@ export const metadata = {
 
 export default function VerifyEmailPage() {
   return (
-    <Suspense fallback={<div className="text-center py-4">Loading verification...</div>}>
+    <Suspense
+      fallback={<div className="py-4 text-center">Loading verification...</div>}
+    >
       <VerifyEmailView />
     </Suspense>
   );
