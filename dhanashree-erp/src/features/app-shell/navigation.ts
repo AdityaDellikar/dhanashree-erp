@@ -6,6 +6,7 @@ import {
   IndianRupee,
   LayoutDashboard,
   Settings,
+  Truck,
   UsersRound,
 } from "lucide-react";
 import type { Route } from "next";
@@ -45,6 +46,12 @@ export const navigationGroups: readonly NavigationGroup[] = [
         href: "/app/parties",
         icon: Handshake,
         label: "Parties",
+      },
+      {
+        description: "Procurement contacts and supplier payables foundation.",
+        href: "/app/suppliers",
+        icon: Truck,
+        label: "Suppliers",
       },
       {
         description: "Project income and expense ledger.",

@@ -15,6 +15,7 @@ export type CashflowEntry = Tables<"cashflow_entries">;
 export type CashflowEntryWithRelations = CashflowEntry & {
   party: Pick<Tables<"parties">, "id" | "name" | "type"> | null;
   project: Pick<Tables<"projects">, "code" | "id" | "name">;
+  supplier: Pick<Tables<"suppliers">, "id" | "name" | "status"> | null;
 };
 
 export type CashflowSummary = {
@@ -53,7 +54,7 @@ export async function getCashflowEntries(
   let query = supabase
     .from("cashflow_entries")
     .select(
-      "*, project:projects(id, name, code), party:parties(id, name, type)",
+      "*, project:projects(id, name, code), party:parties(id, name, type), supplier:suppliers(id, name, status)",
     )
     .eq("organization_id", currentOrganization.id)
     .order("transaction_date", { ascending: false })
@@ -104,7 +105,7 @@ export async function getCashflowEntry(
   const { data, error } = await supabase
     .from("cashflow_entries")
     .select(
-      "*, project:projects(id, name, code), party:parties(id, name, type)",
+      "*, project:projects(id, name, code), party:parties(id, name, type), supplier:suppliers(id, name, status)",
     )
     .eq("id", entryId)
     .eq("organization_id", currentOrganization.id)
@@ -148,10 +149,35 @@ export async function getPartyCashflowEntries(
   const { data, error } = await supabase
     .from("cashflow_entries")
     .select(
-      "*, project:projects(id, name, code), party:parties(id, name, type)",
+      "*, project:projects(id, name, code), party:parties(id, name, type), supplier:suppliers(id, name, status)",
     )
     .eq("organization_id", currentOrganization.id)
     .eq("party_id", partyId)
+    .order("transaction_date", { ascending: false })
+    .order("created_at", { ascending: false })
+    .limit(limit);
+
+  if (error) {
+    throw new Error(error.message);
+  }
+
+  return (data ?? []) as CashflowEntryWithRelations[];
+}
+
+export async function getSupplierCashflowEntries(
+  supplierId: string,
+  limit = 5,
+): Promise<CashflowEntryWithRelations[]> {
+  const currentOrganization = await requireCurrentOrganization();
+  const supabase = await createClient();
+
+  const { data, error } = await supabase
+    .from("cashflow_entries")
+    .select(
+      "*, project:projects(id, name, code), party:parties(id, name, type), supplier:suppliers(id, name, status)",
+    )
+    .eq("organization_id", currentOrganization.id)
+    .eq("supplier_id", supplierId)
     .order("transaction_date", { ascending: false })
     .order("created_at", { ascending: false })
     .limit(limit);

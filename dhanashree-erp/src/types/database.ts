@@ -25,6 +25,7 @@ export type Database = {
           project_id: string;
           reference_number: string | null;
           status: Database["public"]["Enums"]["cashflow_status"];
+          supplier_id: string | null;
           transaction_date: string;
           updated_at: string;
         };
@@ -43,6 +44,7 @@ export type Database = {
           project_id: string;
           reference_number?: string | null;
           status?: Database["public"]["Enums"]["cashflow_status"];
+          supplier_id?: string | null;
           transaction_date: string;
           updated_at?: string;
         };
@@ -61,6 +63,7 @@ export type Database = {
           project_id?: string;
           reference_number?: string | null;
           status?: Database["public"]["Enums"]["cashflow_status"];
+          supplier_id?: string | null;
           transaction_date?: string;
           updated_at?: string;
         };
@@ -91,6 +94,13 @@ export type Database = {
             columns: ["project_id"];
             isOneToOne: false;
             referencedRelation: "projects";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "cashflow_entries_supplier_id_fkey";
+            columns: ["supplier_id"];
+            isOneToOne: false;
+            referencedRelation: "suppliers";
             referencedColumns: ["id"];
           },
         ];
@@ -361,6 +371,69 @@ export type Database = {
           },
         ];
       };
+      suppliers: {
+        Row: {
+          address: string | null;
+          contact_person: string | null;
+          created_at: string;
+          created_by: string;
+          email: string | null;
+          gst_number: string | null;
+          id: string;
+          name: string;
+          notes: string | null;
+          organization_id: string;
+          phone: string | null;
+          status: Database["public"]["Enums"]["supplier_status"];
+          updated_at: string;
+        };
+        Insert: {
+          address?: string | null;
+          contact_person?: string | null;
+          created_at?: string;
+          created_by: string;
+          email?: string | null;
+          gst_number?: string | null;
+          id?: string;
+          name: string;
+          notes?: string | null;
+          organization_id: string;
+          phone?: string | null;
+          status?: Database["public"]["Enums"]["supplier_status"];
+          updated_at?: string;
+        };
+        Update: {
+          address?: string | null;
+          contact_person?: string | null;
+          created_at?: string;
+          created_by?: string;
+          email?: string | null;
+          gst_number?: string | null;
+          id?: string;
+          name?: string;
+          notes?: string | null;
+          organization_id?: string;
+          phone?: string | null;
+          status?: Database["public"]["Enums"]["supplier_status"];
+          updated_at?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "suppliers_created_by_fkey";
+            columns: ["created_by"];
+            isOneToOne: false;
+            referencedRelation: "users";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "suppliers_organization_id_fkey";
+            columns: ["organization_id"];
+            isOneToOne: false;
+            referencedRelation: "organizations";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
       profiles: {
         Row: {
           avatar_url: string | null;
@@ -454,6 +527,7 @@ export type Database = {
       payment_mode: "cash" | "bank" | "upi" | "cheque" | "other";
       project_status:
         "planned" | "active" | "on_hold" | "completed" | "cancelled";
+      supplier_status: "active" | "inactive";
     };
     CompositeTypes: Record<string, never>;
   };

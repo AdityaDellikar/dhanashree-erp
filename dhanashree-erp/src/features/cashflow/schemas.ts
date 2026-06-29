@@ -49,6 +49,7 @@ export const cashflowEntryFormSchema = z.object({
     "Reference number must be 120 characters or fewer.",
   ),
   status: z.enum(cashflowStatusOptions),
+  supplier_id: z.string().uuid("Select a valid supplier.").nullable().optional(),
   transaction_date: z
     .string()
     .trim()
@@ -104,6 +105,7 @@ export function normalizeCashflowEntryFormInput(
     project_id: values.project_id,
     reference_number: normalizeOptionalText(values.reference_number),
     status: values.status,
+    supplier_id: normalizeOptionalUuid(values.supplier_id),
     transaction_date: values.transaction_date,
   };
 }

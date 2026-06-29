@@ -41,6 +41,7 @@ export function RecentCashflowList({ entries }: RecentCashflowListProps) {
             <p className="text-muted-foreground mt-1 truncate text-xs">
               {entry.transaction_date} · {entry.project.code}
               {entry.party ? ` · ${entry.party.name}` : ""}
+              {entry.supplier ? ` · ${entry.supplier.name}` : ""}
             </p>
           </div>
           <div className="flex items-center justify-between gap-3 sm:justify-end">

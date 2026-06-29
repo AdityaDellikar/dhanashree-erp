@@ -31,10 +31,11 @@ async function requireAuthenticatedUserId() {
   return user.id;
 }
 
-async function validateProjectAndParty(
+async function validateCashflowRelations(
   organizationId: string,
   projectId: string,
   partyId: string | null | undefined,
+  supplierId: string | null | undefined,
 ) {
   const supabase = await createClient();
   const { data: project, error: projectError } = await supabase
@@ -52,23 +53,40 @@ async function validateProjectAndParty(
     return "Selected project does not belong to the active organization.";
   }
 
-  if (!partyId) {
+  if (partyId) {
+    const { data: party, error: partyError } = await supabase
+      .from("parties")
+      .select("id")
+      .eq("id", partyId)
+      .eq("organization_id", organizationId)
+      .maybeSingle();
+
+    if (partyError) {
+      throw new Error(partyError.message);
+    }
+
+    if (!party) {
+      return "Selected party does not belong to the active organization.";
+    }
+  }
+
+  if (!supplierId) {
     return null;
   }
 
-  const { data: party, error: partyError } = await supabase
-    .from("parties")
+  const { data: supplier, error: supplierError } = await supabase
+    .from("suppliers")
     .select("id")
-    .eq("id", partyId)
+    .eq("id", supplierId)
     .eq("organization_id", organizationId)
     .maybeSingle();
 
-  if (partyError) {
-    throw new Error(partyError.message);
+  if (supplierError) {
+    throw new Error(supplierError.message);
   }
 
-  if (!party) {
-    return "Selected party does not belong to the active organization.";
+  if (!supplier) {
+    return "Selected supplier does not belong to the active organization.";
   }
 
   return null;
@@ -93,10 +111,11 @@ export async function createCashflowEntry(
     requireCurrentOrganization(),
     requireAuthenticatedUserId(),
   ]);
-  const validationError = await validateProjectAndParty(
+  const validationError = await validateCashflowRelations(
     currentOrganization.id,
     parsed.data.project_id,
     parsed.data.party_id,
+    parsed.data.supplier_id,
   );
 
   if (validationError) {
@@ -132,6 +151,10 @@ export async function createCashflowEntry(
     revalidatePath(`/app/parties/${parsed.data.party_id}`);
   }
 
+  if (parsed.data.supplier_id) {
+    revalidatePath(`/app/suppliers/${parsed.data.supplier_id}`);
+  }
+
   return {
     id: entry.id,
     message: "Cashflow entry created.",
@@ -156,10 +179,11 @@ export async function updateCashflowEntry(
   }
 
   const currentOrganization = await requireCurrentOrganization();
-  const validationError = await validateProjectAndParty(
+  const validationError = await validateCashflowRelations(
     currentOrganization.id,
     parsed.data.project_id,
     parsed.data.party_id,
+    parsed.data.supplier_id,
   );
 
   if (validationError) {
@@ -192,6 +216,10 @@ export async function updateCashflowEntry(
 
   if (parsed.data.party_id) {
     revalidatePath(`/app/parties/${parsed.data.party_id}`);
+  }
+
+  if (parsed.data.supplier_id) {
+    revalidatePath(`/app/suppliers/${parsed.data.supplier_id}`);
   }
 
   return {

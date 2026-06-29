@@ -12,13 +12,18 @@ import {
 import { CashflowEntryForm } from "@/features/cashflow/components/cashflow-entry-form";
 import { getParties } from "@/features/parties/queries";
 import { getProjects } from "@/features/projects/queries";
+import { getSuppliers } from "@/features/suppliers/queries";
 
 export const metadata = {
   title: "New Cashflow Entry",
 };
 
 export default async function NewCashflowEntryPage() {
-  const [projects, parties] = await Promise.all([getProjects(), getParties()]);
+  const [projects, parties, suppliers] = await Promise.all([
+    getProjects(),
+    getParties(),
+    getSuppliers(),
+  ]);
 
   return (
     <div className="mx-auto flex w-full max-w-5xl flex-col gap-6">
@@ -59,6 +64,7 @@ export default async function NewCashflowEntryPage() {
               mode="create"
               parties={parties}
               projects={projects}
+              suppliers={suppliers}
             />
           </CardContent>
         </Card>

@@ -34,10 +34,11 @@ export function CashflowEntryList({ entries }: CashflowEntryListProps) {
 
   return (
     <div className="overflow-hidden rounded-lg border">
-      <div className="bg-muted/40 grid grid-cols-2 gap-3 px-4 py-3 text-xs font-medium lg:grid-cols-[1fr_0.9fr_0.8fr_0.8fr_0.8fr_auto]">
+      <div className="bg-muted/40 grid grid-cols-2 gap-3 px-4 py-3 text-xs font-medium lg:grid-cols-[1fr_0.8fr_0.8fr_0.8fr_0.7fr_0.8fr_auto]">
         <span>Entry</span>
         <span className="hidden lg:block">Project</span>
         <span className="hidden lg:block">Party</span>
+        <span className="hidden lg:block">Supplier</span>
         <span className="hidden lg:block">Status</span>
         <span className="hidden lg:block">Amount</span>
         <span className="text-right">Action</span>
@@ -45,7 +46,7 @@ export function CashflowEntryList({ entries }: CashflowEntryListProps) {
       {entries.map((entry) => (
         <div
           key={entry.id}
-          className="grid grid-cols-2 items-center gap-3 border-t px-4 py-4 text-sm lg:grid-cols-[1fr_0.9fr_0.8fr_0.8fr_0.8fr_auto]"
+          className="grid grid-cols-2 items-center gap-3 border-t px-4 py-4 text-sm lg:grid-cols-[1fr_0.8fr_0.8fr_0.8fr_0.7fr_0.8fr_auto]"
         >
           <div className="min-w-0">
             <p className="truncate font-medium">{entry.category}</p>
@@ -58,6 +59,9 @@ export function CashflowEntryList({ entries }: CashflowEntryListProps) {
           </p>
           <p className="text-muted-foreground hidden truncate lg:block">
             {entry.party?.name ?? "No party"}
+          </p>
+          <p className="text-muted-foreground hidden truncate lg:block">
+            {entry.supplier?.name ?? "No supplier"}
           </p>
           <p className="hidden capitalize lg:block">
             {formatLabel(entry.status)}

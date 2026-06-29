@@ -29,12 +29,14 @@ import {
 } from "@/features/cashflow/schemas";
 import type { Party } from "@/features/parties/queries";
 import type { Project } from "@/features/projects/queries";
+import type { Supplier } from "@/features/suppliers/queries";
 
 type CashflowEntryFormProps = {
   entry?: CashflowEntryWithRelations;
   mode: "create" | "edit";
   parties: Party[];
   projects: Project[];
+  suppliers: Supplier[];
 };
 
 function fieldError(message?: string) {
@@ -52,6 +54,7 @@ export function CashflowEntryForm({
   mode,
   parties,
   projects,
+  suppliers,
 }: CashflowEntryFormProps) {
   const router = useRouter();
   const [error, setError] = useState<string | undefined>();
@@ -73,6 +76,7 @@ export function CashflowEntryForm({
       project_id: entry?.project_id ?? projects[0]?.id ?? "",
       reference_number: entry?.reference_number ?? "",
       status: entry?.status ?? "completed",
+      supplier_id: entry?.supplier_id ?? "",
       transaction_date:
         entry?.transaction_date ?? new Date().toISOString().slice(0, 10),
     },
@@ -149,6 +153,28 @@ export function CashflowEntryForm({
             ))}
           </select>
           {fieldError(errors.party_id?.message)}
+        </div>
+
+        <div className="space-y-2">
+          <label htmlFor="cashflow-supplier" className="text-sm font-medium">
+            Supplier
+          </label>
+          <select
+            id="cashflow-supplier"
+            disabled={isPending}
+            className="border-input bg-background h-10 w-full rounded-md border px-3 text-sm shadow-sm disabled:opacity-50"
+            {...register("supplier_id", {
+              setValueAs: normalizeOptionalUuid,
+            })}
+          >
+            <option value="">No supplier</option>
+            {suppliers.map((supplier) => (
+              <option key={supplier.id} value={supplier.id}>
+                {supplier.name}
+              </option>
+            ))}
+          </select>
+          {fieldError(errors.supplier_id?.message)}
         </div>
 
         <div className="space-y-2">

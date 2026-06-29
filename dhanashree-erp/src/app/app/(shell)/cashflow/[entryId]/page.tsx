@@ -12,6 +12,7 @@ import { CashflowEntryForm } from "@/features/cashflow/components/cashflow-entry
 import { getCashflowEntry } from "@/features/cashflow/queries";
 import { getParties } from "@/features/parties/queries";
 import { getProjects } from "@/features/projects/queries";
+import { getSuppliers } from "@/features/suppliers/queries";
 
 type CashflowDetailPageProps = {
   params: Promise<{
@@ -46,10 +47,11 @@ export default async function CashflowDetailPage({
   params,
 }: CashflowDetailPageProps) {
   const { entryId } = await params;
-  const [entry, projects, parties] = await Promise.all([
+  const [entry, projects, parties, suppliers] = await Promise.all([
     getCashflowEntry(entryId),
     getProjects(),
     getParties(),
+    getSuppliers(),
   ]);
 
   return (
@@ -72,7 +74,7 @@ export default async function CashflowDetailPage({
         <CardHeader>
           <CardTitle>Entry information</CardTitle>
           <CardDescription>
-            Full cashflow record with linked project and optional party.
+            Full cashflow record with linked project, party, and supplier.
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -134,6 +136,21 @@ export default async function CashflowDetailPage({
               </dd>
             </div>
             <div className="sm:col-span-2">
+              <dt className="text-muted-foreground">Supplier</dt>
+              <dd className="mt-1 font-medium">
+                {entry.supplier ? (
+                  <Link
+                    className="hover:underline"
+                    href={`/app/suppliers/${entry.supplier.id}`}
+                  >
+                    {entry.supplier.name}
+                  </Link>
+                ) : (
+                  "Not set"
+                )}
+              </dd>
+            </div>
+            <div className="sm:col-span-2">
               <dt className="text-muted-foreground">Description</dt>
               <dd className="mt-1 font-medium">
                 {entry.description ?? "Not set"}
@@ -160,6 +177,7 @@ export default async function CashflowDetailPage({
             mode="edit"
             parties={parties}
             projects={projects}
+            suppliers={suppliers}
           />
         </CardContent>
       </Card>
