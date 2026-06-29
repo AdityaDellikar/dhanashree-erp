@@ -9,6 +9,92 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
+      cashflow_entries: {
+        Row: {
+          amount: number;
+          category: string;
+          created_at: string;
+          created_by: string;
+          description: string | null;
+          entry_type: Database["public"]["Enums"]["cashflow_entry_type"];
+          id: string;
+          notes: string | null;
+          organization_id: string;
+          party_id: string | null;
+          payment_mode: Database["public"]["Enums"]["payment_mode"];
+          project_id: string;
+          reference_number: string | null;
+          status: Database["public"]["Enums"]["cashflow_status"];
+          transaction_date: string;
+          updated_at: string;
+        };
+        Insert: {
+          amount: number;
+          category: string;
+          created_at?: string;
+          created_by: string;
+          description?: string | null;
+          entry_type: Database["public"]["Enums"]["cashflow_entry_type"];
+          id?: string;
+          notes?: string | null;
+          organization_id: string;
+          party_id?: string | null;
+          payment_mode: Database["public"]["Enums"]["payment_mode"];
+          project_id: string;
+          reference_number?: string | null;
+          status?: Database["public"]["Enums"]["cashflow_status"];
+          transaction_date: string;
+          updated_at?: string;
+        };
+        Update: {
+          amount?: number;
+          category?: string;
+          created_at?: string;
+          created_by?: string;
+          description?: string | null;
+          entry_type?: Database["public"]["Enums"]["cashflow_entry_type"];
+          id?: string;
+          notes?: string | null;
+          organization_id?: string;
+          party_id?: string | null;
+          payment_mode?: Database["public"]["Enums"]["payment_mode"];
+          project_id?: string;
+          reference_number?: string | null;
+          status?: Database["public"]["Enums"]["cashflow_status"];
+          transaction_date?: string;
+          updated_at?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "cashflow_entries_created_by_fkey";
+            columns: ["created_by"];
+            isOneToOne: false;
+            referencedRelation: "users";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "cashflow_entries_organization_id_fkey";
+            columns: ["organization_id"];
+            isOneToOne: false;
+            referencedRelation: "organizations";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "cashflow_entries_party_id_fkey";
+            columns: ["party_id"];
+            isOneToOne: false;
+            referencedRelation: "parties";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "cashflow_entries_project_id_fkey";
+            columns: ["project_id"];
+            isOneToOne: false;
+            referencedRelation: "projects";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
       organization_invitations: {
         Row: {
           accepted_at: string | null;
@@ -361,8 +447,11 @@ export type Database = {
       };
     };
     Enums: {
+      cashflow_entry_type: "income" | "expense";
+      cashflow_status: "pending" | "completed" | "cancelled";
       organization_role: "owner" | "admin" | "manager" | "staff" | "viewer";
       party_type: "supplier" | "customer" | "subcontractor" | "other";
+      payment_mode: "cash" | "bank" | "upi" | "cheque" | "other";
       project_status:
         "planned" | "active" | "on_hold" | "completed" | "cancelled";
     };

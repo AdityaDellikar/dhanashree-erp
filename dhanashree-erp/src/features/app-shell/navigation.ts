@@ -3,6 +3,7 @@ import {
   BriefcaseBusiness,
   FileText,
   Handshake,
+  IndianRupee,
   LayoutDashboard,
   Settings,
   UsersRound,
@@ -44,6 +45,12 @@ export const navigationGroups: readonly NavigationGroup[] = [
         href: "/app/parties",
         icon: Handshake,
         label: "Parties",
+      },
+      {
+        description: "Project income and expense ledger.",
+        href: "/app/cashflow",
+        icon: IndianRupee,
+        label: "Cashflow",
       },
       {
         description: "Labour and attendance workspace.",

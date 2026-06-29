@@ -130,3 +130,21 @@ Completed:
 - Tenant-scoped server queries and actions
 - Projects and Parties app navigation links
 - Empty states and production-friendly forms
+
+---
+
+## Sprint 2 Batch 2
+✅ Completed
+
+MVP Cashflow Engine
+
+Completed:
+
+- Cashflow entries database table, enums, RLS policies, indexes, and grants
+- Cashflow entry create, edit, list, detail, and filter flows
+- Tenant-scoped server queries and actions
+- Project and party ownership validation before cashflow mutations
+- Dashboard income, expense, net cashflow, and project count summaries
+- Project recent cashflow entries section
+- Party recent transactions section
+- Cashflow navigation link

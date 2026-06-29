@@ -8,6 +8,8 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { RecentCashflowList } from "@/features/cashflow/components/recent-cashflow-list";
+import { getPartyCashflowEntries } from "@/features/cashflow/queries";
 import { PartyForm } from "@/features/parties/components/party-form";
 import { getParty } from "@/features/parties/queries";
 
@@ -34,7 +36,10 @@ export default async function PartyDetailPage({
   params,
 }: PartyDetailPageProps) {
   const { partyId } = await params;
-  const party = await getParty(partyId);
+  const [party, recentEntries] = await Promise.all([
+    getParty(partyId),
+    getPartyCashflowEntries(partyId),
+  ]);
 
   return (
     <div className="mx-auto flex w-full max-w-5xl flex-col gap-6">
@@ -101,6 +106,25 @@ export default async function PartyDetailPage({
         </CardHeader>
         <CardContent>
           <PartyForm mode="edit" party={party} />
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardHeader>
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+            <div>
+              <CardTitle>Recent transactions</CardTitle>
+              <CardDescription>
+                Latest cashflow records linked to this party.
+              </CardDescription>
+            </div>
+            <Button asChild size="sm">
+              <Link href="/app/cashflow/new">Create entry</Link>
+            </Button>
+          </div>
+        </CardHeader>
+        <CardContent>
+          <RecentCashflowList entries={recentEntries} />
         </CardContent>
       </Card>
     </div>

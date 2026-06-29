@@ -8,6 +8,8 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { RecentCashflowList } from "@/features/cashflow/components/recent-cashflow-list";
+import { getProjectCashflowEntries } from "@/features/cashflow/queries";
 import { ProjectForm } from "@/features/projects/components/project-form";
 import { getProject } from "@/features/projects/queries";
 
@@ -44,7 +46,10 @@ export default async function ProjectDetailPage({
   params,
 }: ProjectDetailPageProps) {
   const { projectId } = await params;
-  const project = await getProject(projectId);
+  const [project, recentEntries] = await Promise.all([
+    getProject(projectId),
+    getProjectCashflowEntries(projectId),
+  ]);
 
   return (
     <div className="mx-auto flex w-full max-w-5xl flex-col gap-6">
@@ -119,6 +124,32 @@ export default async function ProjectDetailPage({
         </CardHeader>
         <CardContent>
           <ProjectForm mode="edit" project={project} />
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardHeader>
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+            <div>
+              <CardTitle>Recent cashflow entries</CardTitle>
+              <CardDescription>
+                Latest income and expense records attached to this project.
+              </CardDescription>
+            </div>
+            <div className="flex gap-2">
+              <Button asChild size="sm" variant="outline">
+                <Link href={`/app/cashflow?projectId=${project.id}`}>
+                  View all
+                </Link>
+              </Button>
+              <Button asChild size="sm">
+                <Link href="/app/cashflow/new">Create entry</Link>
+              </Button>
+            </div>
+          </div>
+        </CardHeader>
+        <CardContent>
+          <RecentCashflowList entries={recentEntries} />
         </CardContent>
       </Card>
     </div>

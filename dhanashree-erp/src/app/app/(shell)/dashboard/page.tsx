@@ -3,6 +3,7 @@ import {
   Building2,
   FileText,
   Handshake,
+  IndianRupee,
   Settings,
   UsersRound,
 } from "lucide-react";
@@ -16,6 +17,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { getCashflowSummary } from "@/features/cashflow/queries";
 import { requireCurrentOrganization } from "@/features/organizations/queries";
 
 const moduleCards = [
@@ -30,6 +32,12 @@ const moduleCards = [
     href: "/app/parties",
     icon: Handshake,
     title: "Parties",
+  },
+  {
+    description: "Project income and expense ledger.",
+    href: "/app/cashflow",
+    icon: IndianRupee,
+    title: "Cashflow",
   },
   {
     description: "Labour attendance and workforce history foundation.",
@@ -55,8 +63,19 @@ export const metadata = {
   title: "Dashboard",
 };
 
+function formatMoney(value: number) {
+  return new Intl.NumberFormat("en-IN", {
+    currency: "INR",
+    maximumFractionDigits: 2,
+    style: "currency",
+  }).format(value);
+}
+
 export default async function AppDashboardPage() {
-  const currentOrganization = await requireCurrentOrganization();
+  const [currentOrganization, summary] = await Promise.all([
+    requireCurrentOrganization(),
+    getCashflowSummary(),
+  ]);
 
   return (
     <div className="flex flex-col gap-6">
@@ -71,6 +90,52 @@ export default async function AppDashboardPage() {
       </div>
 
       <div className="grid gap-4 md:grid-cols-3">
+        <Card>
+          <CardHeader>
+            <CardTitle>Total income</CardTitle>
+            <CardDescription>Completed and pending inflows.</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <p className="text-2xl font-semibold text-emerald-600">
+              {formatMoney(summary.totalIncome)}
+            </p>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader>
+            <CardTitle>Total expense</CardTitle>
+            <CardDescription>Completed and pending outflows.</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <p className="text-destructive text-2xl font-semibold">
+              {formatMoney(summary.totalExpense)}
+            </p>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader>
+            <CardTitle>Net cashflow</CardTitle>
+            <CardDescription>Income minus expense.</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <p className="text-2xl font-semibold">
+              {formatMoney(summary.netCashflow)}
+            </p>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader>
+            <CardTitle>Total projects</CardTitle>
+            <CardDescription>Projects in this organization.</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <p className="text-2xl font-semibold">{summary.totalProjects}</p>
+          </CardContent>
+        </Card>
+
         <Card>
           <CardHeader>
             <Building2 className="text-primary size-5" />
